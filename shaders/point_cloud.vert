@@ -1,6 +1,7 @@
 #version 330 core
 
 layout (location = 0) in vec3 in_position;
+layout (location = 1) in int is_prime;
 
 layout (std140) uniform UBO {
     mat4  m_proj;
@@ -12,7 +13,6 @@ layout (std140) uniform UBO {
 };
 
 out vec3 v_color;
-
 
 mat2 rot(float a) {
     float sa = sin(a);
@@ -40,8 +40,11 @@ void main() {
     float max_point_size = 12.0;
     float min_point_size = 2.0;
 
-    v_color = abs(normalize(in_position));
-    v_color = hsl2rgb(vec3(mix(v_color.r, v_color.b, length(v_color)), 1.0, 0.5));
+    if (is_prime == 1) v_color = vec3(1);
+    else {
+        v_color = abs(normalize(in_position));
+        v_color = hsl2rgb(vec3(mix(v_color.r, v_color.b, length(v_color)), 1.0, 0.5));
+    }
 
     vec3 v_position = rotate_world(in_position);
 
